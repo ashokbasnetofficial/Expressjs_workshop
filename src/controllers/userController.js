@@ -1,18 +1,21 @@
 const User = require('../models/userModel')
 module.exports = {
-    index: async (req, res) => {
+    index:  async (req, res) => {
         const data = await User.findAll();
-        console.log(data);
-        res.render('/user/index', data)
+      
+        res.render('user/index', {data})
     },
     new: async (req, res) => {
-        res.render('user/new');
+        res.render('user/index',{});
     },
     newUser: async (req, res) => {
-        const { id, username, password, name, email, phone } = req.body;
+       
+        const { id, username, password, name, email, phone } = req.body; 
+        console.log(req.body)
         const user = await User.build({ id, username, password, name, email, phone })
         await user.save();
-        res.redirect('/user')
+        // res.send('success!')
+        res.redirect('/user/new');
     }
 
 

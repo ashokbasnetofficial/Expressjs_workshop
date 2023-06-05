@@ -1,6 +1,5 @@
-const {Sequelize,DataTypes,Model}     =require('sequelize')
-const sequelize = new Sequelize('@root/sequelize-config')
-console.log(sequelize)
+const {Sequelize,DataTypes,Model} =require('sequelize')
+const sequelize = require('@root/sequelize-config')
 class User extends Model{}
 
 User.init({
@@ -10,12 +9,12 @@ User.init({
        primaryKey:true 
     },
     username:{
-        type:DataTypes.INTEGER,
-        allowNull:true
+        type:DataTypes.STRING,
+        allowNull:false
     },
     password:{
-        type:DataTypes.INTEGER,
-        allowNull:true
+        type:DataTypes.STRING,
+        allowNull:false
     },
     name:{
         type:DataTypes.STRING,
@@ -32,8 +31,8 @@ User.init({
 },
 {
     sequelize,
-    modelName:User,
-    tableName:users
+    tableName:'user',
+    modelName:'User',
 
 }
 )
