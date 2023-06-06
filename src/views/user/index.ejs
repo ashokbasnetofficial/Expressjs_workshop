@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 </head>
+
 <body>
 	<div class="container">
 		<div class="table-responsive">
@@ -30,51 +32,68 @@
 							<th>Email</th>
 							<th>Phone</th>
 							<th>Actions</th>
-	
+
 						</tr>
 					</thead>
-					<tbody  id="table-body">
-						<% 
-							var currentPage=1; 
-							var itemsPerPage=5; 
-							var totalPages=Math.ceil(data.length / itemsPerPage);
-							var startIndex=(currentPage - 1) * itemsPerPage;
-							var endIndex=startIndex + itemsPerPage; 
-							var currentItems=data.slice(startIndex, endIndex); 
-						  %>
-						  <% currentItems.forEach(function(user, i) { %>
-							<tr>
-							   <td><%= i + 1 %></td>
-							   <td><%= user.username %></td>
-							   <td><%= user.password %></td>
-							   <td><%= user.name %></td>
-							   <td><%= user.email %></td>
-							   <td><%= user.phone %></td>
-							   <td>
-								  <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-								  <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-							   </td>
-							</tr>
-						 <% }); %>
-						 
+					<tbody id="table-body">
+						<% let currentPage=1; let itemsPerPage=5; let totalPages=Math.ceil(data.length / itemsPerPage);
+							let startIndex=(currentPage - 1) * itemsPerPage; let endIndex=startIndex + itemsPerPage; let
+							currentItems=data.slice(startIndex, endIndex); %>
+							<% currentItems.forEach(function(user, i) { %>
+								<tr>
+									<td>
+										<%= i + 1 %>
+									</td>
+									<td>
+										<%= user.username %>
+									</td>
+									<td>
+										<%= user.password %>
+									</td>
+									<td>
+										<%= user.name %>
+									</td>
+									<td>
+										<%= user.email %>
+									</td>
+									<td>
+										<%= user.phone %>
+									</td>
+									<td>
+										<a href="#editEmployeeModal" class="edit"  data-toggle="modal" data-id="232"><i
+												class="material-icons" data-toggle="tooltip" title="Edit"
+												>&#xE254;</i></a>
+										<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i
+												class="material-icons" data-toggle="tooltip"
+												title="Delete">&#xE872;</i></a>
+									</td>
+								</tr>
+								<% }); %>
+
 					</tbody>
 				</table>
 				<div class="clearfix">
-					<div class="hint-text">Showing <b>
-							<%= currentItems.length %>
+					<div class="hint-text">Showing <b id="col-number">
+							5
 						</b> out of <b>
 							<%= data.length %>
 						</b> entries</div>
-						<ul class="pagination">
-							<% for (var i = 1; i <= totalPages; i++) { %>
-							   <% if (i === currentPage) { %>
-								  <li class="page-item active"><a href="#" class="page-link"><%= i %></a></li>
-							   <% } else { %>
-								  <li class="page-item"><a href="#" class="page-link" onclick="onChange(<%= i %>,'<%=data %>')"><%= i %></a></li>
-							   <% } %>
-							<% } %>
-						 </ul>
-						 
+					<ul class="pagination">
+						<% for (let i=1; i <=totalPages; i++) { %>
+							<% if (i===currentPage) { %>
+								<li class="page-item active"><a href="#" class="page-link"
+										onclick="onChange(<%= i %>,'<%= JSON.stringify(data) %>')">
+										<%= i %>
+									</a></li>
+								<% } else { %>
+									<li class="page-item"><a href="#" class="page-link"
+											onclick="onChange(<%= i %>,'<%= JSON.stringify(data) %>')">
+											<%= i %>
+										</a></li>
+									<% } %>
+										<% } %>
+					</ul>
+
 				</div>
 			</div>
 		</div>
@@ -97,7 +116,7 @@
 							<label>password</label>
 							<input type="password" name="password" class="form-control" required>
 						</div>
-	
+
 						<div class="form-group">
 							<label>Name</label>
 							<input type="text" name="name" class="form-control" required>
@@ -123,12 +142,13 @@
 	<div id="editEmployeeModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
+				<form method="post" id="editForm">
 					<div class="modal-header">
 						<h4 class="modal-title">Edit Employee</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
+						<input type="hidden" id="editUserId" name="id">
 						<div class="form-group">
 							<label>Username</label>
 							<input type="text" name="username" class="form-control" required>
@@ -137,7 +157,7 @@
 							<label>password</label>
 							<input type="password" class="form-control" required>
 						</div>
-	
+
 						<div class="form-group">
 							<label>Name</label>
 							<input type="text" name="name" class="form-control" required>
@@ -179,63 +199,87 @@
 				</form>
 			</div>
 		</div>
-	
+
 	</div>
 	<div>
-		<%=data%>
-	</div>
-<script>
-const onChange =(page,data)=>{
-	
- renderTable(page,data);
-   
-}
 
-function renderTable(currentPage,data) {
-	  console.log(currentPage)
-	  console.log(data)
-	   var startIndex = (currentPage - 1) * 5;
-	   var endIndex = startIndex + 5;
-	   var currentItems = data.slice(startIndex, endIndex);
-	   var tableBody = document.getElementById("table-body");
- 
-	   var html = "";
-	   currentItems.forEach(function(user, i) {
-		  html += "<tr>";
-		  html += "<td>" + (startIndex + i + 1) + "</td>";
-		  html += "<td>" + user.username + "</td>";
-		  html += "<td>" + user.password + "</td>";
-		  html += "<td>" + user.name + "</td>";
-		  html += "<td>" + user.email + "</td>";
-		  html += "<td>" + user.phone + "</td>";
-		  html += "<td>";
-		  html += '<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>';
-		  html += '<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>';
-		  html += "</td>";
-		  html += "</tr>";
-	   });
- 
-	   tableBody.innerHTML = html;
- 
-	   var pagination = document.getElementsByClassName("pagination")[0];
-	   pagination.innerHTML = generatePaginationLinks();
-	}
- 
-	function generatePaginationLinks() {
-	   var links = "";
-	   for (var i = 1; i <= totalPages; i++) {
-		  if (i === currentPage) {
-			 links += '<li class="page-item active"><a href="#" class="page-link">' + i + '</a></li>';
-		  } else {
-			 links += '<li class="page-item"><a href="#" class="page-link" onclick="changePage(' + i + ')">' + i + '</a></li>';
-		  }
-	   }
-	   return links;
-	}
- 
-	// Initial rendering
-	renderTable();
- </script>
- 
+	</div>
+	<script>
+	
+  document.addEventListener("click", function (event) {
+  var target = event.target;
+
+  
+	
+    var userId = target.getAttribute("data-id");
+	console.log("ram"+userId)
+
+    var form = document.querySelector("#editForm");
+    var editUserId = form.querySelector("#editUserId");
+    editUserId.value = userId;
+  
+});
+		const onChange = (page, data) => {
+
+			renderTable(page, data);
+
+		}
+
+		function renderTable(currentPage, data) {
+
+			const getdata = JSON.parse(data)
+
+			let startIndex = (currentPage - 1) * 5;
+			let endIndex = startIndex + 5;
+			let currentItems = getdata.slice(startIndex, endIndex);
+			let tableBody = document.getElementById("table-body");
+
+			let html = "";
+		
+		 document.getElementById('col-number').innerHTML = currentItems.length +startIndex;
+			currentItems.forEach(function (user, i) {
+				html += "<tr>";
+				html += "<td>" + (startIndex + i + 1) + "</td>";
+				html += "<td>" + user.username + "</td>";
+				html += "<td>" + user.password + "</td>";
+				html += "<td>" + user.name + "</td>";
+				html += "<td>" + user.email + "</td>";
+				html += "<td>" + user.phone + "</td>";
+				html += "<td>";
+				html += '<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>';
+				html += '<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>';
+				html += "</td>";
+				html += "</tr>";
+			});
+
+			tableBody.innerHTML = html;
+
+
+
+			//+ Update the active class for the current page
+			let pagination = document.getElementsByClassName("pagination")[0];
+			let pageLinks = pagination.getElementsByTagName("a");
+
+			for (let i = 0; i < pageLinks.length; i++) {
+				let pageLink = pageLinks[i];
+
+				if (parseInt(pageLink.innerHTML) === currentPage) {
+					pageLink.parentNode.classList.add("active");
+				} else {
+					pageLink.parentNode.classList.remove("active");
+				}
+
+			}
+
+
+		}
+
+
+		// Initial rendering
+		renderTable(1, "<%= JSON.stringify(data) %>");
+		
+	</script>
+
 </body>
+
 </html>

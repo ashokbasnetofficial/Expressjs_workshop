@@ -16,7 +16,24 @@ module.exports = {
         await user.save();
         // res.send('success!')
         res.redirect('/user/new');
+    },
+    edit: async(req,res)=>{
+        let id =req.body.id;
+        let user = await User.findByPk(id);
+        res.render('user/index',{user});
     }
-
-
+    ,
+    editUser: async (req,res)=>{
+        let id = req.params.id;
+        let user = await User.findByPk(1);
+        let {username,password,name,email,phone}= req.body;
+        user.username=username;
+        user.password=password;
+        user.name =name;
+        user.email=email;
+        user.phone =phone;
+        user.update();
+        await user.save();
+        res.redirect('/user/new')
+    }
 }
